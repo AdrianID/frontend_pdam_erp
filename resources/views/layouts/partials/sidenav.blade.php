@@ -26,7 +26,7 @@
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-center">
                         <i class="fas fa-users text-sm leading-normal text-blue-500"></i>
                     </div>
-                    <span class="ml-1 duration-300 opacity-100 ease">Pelanggan</span>
+                    <span class="ml-1 duration-300 opacity-100 ease">Manajemen Pelanggan</span>
                     <i class="fas fa-chevron-down ml-auto text-xs transition-transform duration-300"></i>
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
@@ -38,26 +38,14 @@
                     </li>
                     <li class="pl-12 pr-4">
                         <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                            <i class="fas fa-user-edit mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Ubah Pelanggan</span>
+                            <i class="fas fa-address-card mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Data Induk Pelanggan</span>
                         </a>
                     </li>
                     <li class="pl-12 pr-4">
                         <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                            <i class="fas fa-user-minus mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Hapus Pelanggan</span>
-                        </a>
-                    </li>
-                    <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                            <i class="fas fa-tint mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Penggunaan Air</span>
-                        </a>
-                    </li>
-                    <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                            <i class="fas fa-history mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Riwayat Penggunaan</span>
+                            <i class="fas fa-chart-line mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Monitoring Penggunaan</span>
                         </a>
                     </li>
                 </ul>
