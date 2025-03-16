@@ -6,6 +6,13 @@
 @source "../**/*.js";
 @source "../**/*.vue";
 
+@import './argon-dashboard-tailwind.css';
+@import './nucleo-icons.css';
+@import './nucleo-svg.css';
+@import './perfect-scrollbar.css';
+@import './tooltips.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
