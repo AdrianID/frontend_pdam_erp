@@ -1,22 +1,22 @@
 import './bootstrap';
 
 // Import komponen-komponen Argon Dashboard
-// import './argon-dashboard-tailwind';
-// import './carousel';
-// import './charts';
-// import './dropdown';
-// import './fixed-plugin';
-// import './nav-pills';
-// import './navbar-collapse';
-// import './navbar-sticky';
-// import './perfect-scrollbar';
-// import './sidenav-burger';
-// import './tooltips';
+import './argon-dashboard-tailwind';
+import './carousel';
+import './charts';
+import './dropdown';
+import './fixed-plugin';
+import './nav-pills';
+import './navbar-collapse';
+import './navbar-sticky';
+import './perfect-scrollbar';
+import './sidenav-burger';
+import './tooltips';
 
-// // Import plugins
-// import './plugins/Chart.extension';
-// import './plugins/chartjs.min';
-// import './plugins/perfect-scrollbar.min';
+// Import plugins
+import './plugins/Chart.extension';
+import './plugins/chartjs.min';
+import './plugins/perfect-scrollbar.min';
 
 import '@fortawesome/fontawesome-free/js/all.min.js';
 
