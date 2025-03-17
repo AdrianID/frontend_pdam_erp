@@ -12,7 +12,7 @@
         <ul class="flex flex-col pl-0 mb-0">
             <!-- Dashboard -->
             <li class="mt-0.5 w-full">
-                <a class="nav-link py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors rounded-lg hover:bg-gray-100" href="{{ route('dashboard') }}">
+                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors rounded-lg hover:bg-gray-100" href="{{ route('dashboard') }}">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-center">
                         <i class="fas fa-chart-line text-sm leading-normal text-blue-500"></i>
                     </div>
