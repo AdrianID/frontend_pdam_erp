@@ -52,13 +52,13 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['area']['nama'] }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex space-x-3">
-                                        <a href="{{ route('customer.detail', ['id' => $customer['id']]) }}" class="p-2.5 text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md" title="Lihat Detail">
+                                        <a href="{{ route('pelanggan.detail', ['id' => $customer['id']]) }}" class="p-2.5 text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md" title="Lihat Detail">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <button class="p-2.5 text-amber-600 hover:text-white bg-amber-50 hover:bg-amber-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md" title="Edit">
+                                        <a href="{{ route('pelanggan.edit', ['id' => $customer['id']]) }}" class="p-2.5 text-amber-600 hover:text-white bg-amber-50 hover:bg-amber-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md" title="Edit">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="p-2.5 text-red-600 hover:text-white bg-red-50 hover:bg-red-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md" title="Hapus">
+                                        </a>
+                                        <button wire:click="deleteCustomer({{ $customer['id'] }})" class="p-2.5 text-red-600 hover:text-white bg-red-50 hover:bg-red-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md" title="Hapus">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>

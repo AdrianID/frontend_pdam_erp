@@ -31,13 +31,13 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('pelanggan.create') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-user-plus mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Tambah Pelanggan</span>
                         </a>
                     </li>
                     <li class="pl-12 pr-4">
-                        <a href="{{ route('customers') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('pelanggan.index') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-address-card mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Data Induk Pelanggan</span>
                         </a>

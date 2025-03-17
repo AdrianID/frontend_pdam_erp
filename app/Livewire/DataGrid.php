@@ -29,6 +29,12 @@ class DataGrid extends Component
         }
     }
 
+    public function deleteCustomer($id)
+    {
+        // $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVsaTc4QGV4YW1wbGUuY29tIiwicm9sZSI6InBlbGFuZ2dhbiIsImV4cCI6MTc0MjIyNjY0MX0.oONux4OU8r6CCbD4ESUSSfLIqb-QKZxBx-hHcGFA4JA')
+        //     ->delete("http://45.80.181.85:8001/pelanggan/{$id}");
+    }
+
     #[Layout('layouts.app')]
     public function render()
     {

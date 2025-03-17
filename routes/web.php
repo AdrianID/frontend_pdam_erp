@@ -15,10 +15,10 @@ Route::middleware('guest')->group(function () {
 Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/', Dashboard::class)->name('dashboard');
     Route::get('/dashboard', Dashboard::class);
-    Route::get('/data-grid', DataGrid::class)->name('customers');
-    Route::get('/pelanggan/{id}', CustomerDetail::class)->name('customer.detail');
-    Route::get('/customers/create/new', App\Livewire\CustomerForm::class)->name('customer.create');
-    Route::get('/customers/{id}/edit', App\Livewire\CustomerForm::class)->name('customer.edit');
+    Route::get('/pelanggan', DataGrid::class)->name('pelanggan.index');
+    Route::get('/pelanggan/{id}', CustomerDetail::class)->name('pelanggan.detail');
+    Route::get('/pelanggan/create/new', App\Livewire\CustomerForm::class)->name('pelanggan.create');
+    Route::get('/pelanggan/{id}/edit', App\Livewire\CustomerForm::class)->name('pelanggan.edit');
     
     // Profile & Logout routes
     Route::get('/profile', App\Livewire\Profile::class)->name('profile');
