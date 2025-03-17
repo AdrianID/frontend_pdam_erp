@@ -29,7 +29,7 @@ class ApiService
         try {
             $headers = [
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . Cache::get('jwt_token'),
+                'Authorization' => 'Bearer ' . session('token'),
             ];
 
             $response = $this->client->request($method, $endpoint, [

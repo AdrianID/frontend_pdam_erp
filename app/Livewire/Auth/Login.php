@@ -4,10 +4,12 @@ namespace App\Livewire\Auth;
 
 use Livewire\Component;
 use App\Services\ApiService;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\Layout;
 
 class Login extends Component
 {
+    
     public $email;
     public $password;
     
@@ -15,6 +17,13 @@ class Login extends Component
         'email' => 'required|email',
         'password' => 'required',
     ];
+
+    public function mount()
+    {
+        if (session()->has('token')) {
+            return redirect()->to('/');
+        }
+    }
 
     public function login()
     {
@@ -26,20 +35,14 @@ class Login extends Component
             'email' => $this->email,
             'password' => $this->password,
         ]);
-        // dd($response);
 
-        if (isset($response['success']) && $response['success'] === true) {
-            // Store JWT token in cache
-            Cache::put('jwt_token', $response['data']['token'], now()->addHours(24));
-            
-            // Store user data in cache
-            Cache::put('user_data', $response['data']['user'], now()->addHours(24));
-            
-            // Store additional user information that might be needed across the application
+        if (isset($response['status']) && $response['status'] === true) {
+            // Store authentication data in session
             session([
-                'user_role' => $response['data']['user']['role'],
-                'username' => $response['data']['user']['username'],
-                'jabatan' => $response['data']['user']['jabatan'],
+                'token' => $response['data']['token'],
+                'user_role' => $response['data']['role'],
+                'username' => $response['data']['username'],
+                'user_email' => $response['data']['email'],
             ]);
             
             // Redirect to home page
@@ -49,6 +52,7 @@ class Login extends Component
         $this->addError('email', 'Invalid credentials');
     }
 
+    #[Layout('layouts.guest')]
     public function render()
     {
         return view('livewire.auth.login');
