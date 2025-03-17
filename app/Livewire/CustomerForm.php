@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Layout;
 
 class CustomerForm extends Component
 {
@@ -61,7 +62,7 @@ class CustomerForm extends Component
     {
         try {
             // Make API request to get customer data
-            $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVsaTc4QGV4YW1wbGUuY29tIiwicm9sZSI6InBlbGFuZ2dhbiIsImV4cCI6MTc0MjI3OTYyMn0.rKLU56AffQeFX1ktXh6grRq8fXx8Xuds5KD68WI28r4')->get("http://45.80.181.85:8001/pelanggan/{$this->customer_id}");
+            $response = Http::withToken(session('token'))->get("http://45.80.181.85:8001/pelanggan/{$this->customer_id}");
             
             // dd($response->status());
             if ($response->successful()) {
@@ -114,80 +115,75 @@ class CustomerForm extends Component
     public function save()
     {
         // Validate the form data
-        $this->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:20',
-            'nomor_telp' => 'required|string|max:15',
-            'email' => 'required|email|max:255',
-            'alamat' => 'required|string',
-            'nomor_meteran' => 'required|string|max:50',
-            'kategori_id' => 'required',
-            'area_id' => 'required',
-            'kecamatan_id' => 'required',
-            'desa_id' => 'required',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
-        
-        // Additional validation for new users
-        if (!$this->customer_id) {
-            $this->validate([
-                'username' => 'required|string|max:255',
-                'password' => 'required|string|min:8',
-                'role' => 'required|in:pelanggan,admin',
-                'status' => 'required|in:active,inactive',
-            ]);
-        }
-        
+        // $this->validate([
+        //     'nama' => 'required|string|max:255',
+        //     'nik' => 'required|string|max:20',
+        //     'nomor_telp' => 'required|string|max:15',
+        //     'email' => 'required|email|max:255',
+        //     'alamat' => 'required|string',
+        //     'nomor_meteran' => 'required|string|max:50',
+        //     'kategori_id' => 'required',
+        //     'area_id' => 'required',
+        //     'kecamatan_id' => 'required',
+        //     'desa_id' => 'required',
+        //     'latitude' => 'required|numeric',
+        //     'longitude' => 'required|numeric',
+        //     'username' => 'required|string|max:255',
+        //     'password' => 'required|string|min:8',
+        // ]);
+
         try {
-            // Prepare data for API
+            // Prepare data for API with the new structure
             $customerData = [
+                'user' => [
+                    'username' => $this->username,
+                    'email' => $this->email,
+                    'password' => $this->password,
+                    'role' => 'customer'
+                ],
+                'kecamatan_id' => $this->kecamatan_id,
+                'desa_id' => $this->desa_id ?? 1,
+                'kategori_id' => $this->kategori_id,
+                'area_id' => $this->area_id,
+                'nomor_pelanggan' => $this->nomor_pelanggan ?? 'PLG-' . date('Y') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT),
                 'nama' => $this->nama,
                 'nik' => $this->nik,
                 'alamat' => $this->alamat,
                 'nomor_telp' => $this->nomor_telp,
                 'nomor_meteran' => $this->nomor_meteran,
-                'kategori_id' => $this->kategori_id,
-                'area_id' => $this->area_id,
-                'kecamatan_id' => $this->kecamatan_id,
-                'desa_id' => $this->desa_id,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
-                'email' => $this->email,
+                'data_geojson' => [
+                    'type' => 'Feature',
+                    'geometry' => [
+                        'type' => 'Point',
+                        'coordinates' => [$this->longitude, $this->latitude]
+                    ],
+                    'properties' => [
+                        'name' => 'Lokasi Pelanggan ' . $this->nama,
+                        'address' => $this->alamat
+                    ]
+                ]
             ];
-            
-            // Add user-specific fields for new users
-            if (!$this->customer_id) {
-                $customerData['username'] = $this->username;
-                $customerData['password'] = $this->password;
-                $customerData['role'] = $this->role;
-                $customerData['status'] = $this->status;
-                
-                if (empty($this->nomor_pelanggan)) {
-                    $customerData['nomor_pelanggan'] = 'CUST' . date('Ymd') . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-                } else {
-                    $customerData['nomor_pelanggan'] = $this->nomor_pelanggan;
-                }
-            }
             
             $response = null;
             
             if ($this->customer_id) {
                 // Update existing customer via API
-                $response = Http::put("http://45.80.181.85:8001/pelanggan/{$this->customer_id}", $customerData);
+                $response = Http::withToken(session('token'))
+                    ->put("http://45.80.181.85:8001/pelanggan/{$this->customer_id}", $customerData);
             } else {
                 // Create new customer via API
-                $response = Http::post("http://45.80.181.85:8001/pelanggan", $customerData);
+                $response = Http::withToken(session('token'))
+                    ->post("http://45.80.181.85:8001/pelanggan/with-user", $customerData);
             }
             
-            // Check if request was successful
             if ($response->successful()) {
                 $data = $response->json();
                 
                 if (isset($data['status']) && $data['status'] === true) {
-                    // Show success message and redirect
                     session()->flash('message', $this->customer_id ? 'Pelanggan berhasil diperbarui.' : 'Pelanggan baru berhasil ditambahkan.');
-                    return redirect()->route('customers');
+                    return redirect()->route('pelanggan.index');
                 } else {
                     session()->flash('error', $data['message'] ?? 'Terjadi kesalahan pada API.');
                 }
@@ -311,8 +307,9 @@ class CustomerForm extends Component
         }
     }
 
+    #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.customer-form')->layout('layouts.app');
+        return view('livewire.customer-form');
     }
 } 
