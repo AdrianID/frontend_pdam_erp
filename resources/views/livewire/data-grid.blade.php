@@ -6,7 +6,7 @@
             <!-- Header/Title Section -->
             <div class="mb-6 flex justify-between items-center">
                 <div>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-1">Data Pelanggan</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-1">Data Pelanggan test</h2>
                     <p class="text-sm text-gray-500">Mengelola dan melihat data pelanggan Anda</p>
                 </div>
                 <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center">
