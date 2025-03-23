@@ -18,21 +18,6 @@ class CustomerForm extends Component
     public $nomor_telp;
     public $email;
     public $alamat;
-    public $pekerjaan;
-    public $rt;
-    public $rw;
-    public $no_rumah;
-    public $gang;
-    public $blok;
-    public $luas_bangunan;
-    public $jenis_hunian;
-    public $status_kepemilikan;
-    public $kebutuhan_air_sebelumnya;
-    public $kran_diminta;
-    public $kwh_pln;
-    public $dokumen_ktp = false;
-    public $dokumen_kk = false;
-    public $dokumen_pbb = false;
     
     // Customer Information
     public $nomor_pelanggan;
@@ -41,8 +26,6 @@ class CustomerForm extends Component
     public $area_id;
     public $kecamatan_id;
     public $desa_id;
-    public $jenis_pelanggan;
-    public $kelompok;
     
     // Account Information
     public $username;
@@ -59,13 +42,6 @@ class CustomerForm extends Component
     public $areas = [];
     public $kecamatans = [];
     public $desas = [];
-    public $jenisPelangganOptions = [];
-    public $kelompokOptions = [];
-    public $luasBangunanOptions = [];
-    public $jenisHunianOptions = [];
-    public $statusKepemilikanOptions = [];
-    public $kebutuhanAirOptions = [];
-    public $kwhPlnOptions = [];
     
     // Listeners for events from other components
     protected $listeners = ['refreshDesas' => 'loadDesas'];
@@ -88,6 +64,7 @@ class CustomerForm extends Component
             // Make API request to get customer data
             $response = Http::withToken(session('token'))->get("http://45.80.181.85:8001/pelanggan/{$this->customer_id}");
             
+            // dd($response->status());
             if ($response->successful()) {
                 $data = $response->json();
                 
@@ -100,21 +77,6 @@ class CustomerForm extends Component
                     $this->nomor_telp = $customer['nomor_telp'];
                     $this->email = $customer['user']['email'];
                     $this->alamat = $customer['alamat'];
-                    $this->pekerjaan = $customer['pekerjaan'];
-                    $this->rt = $customer['rt'];
-                    $this->rw = $customer['rw'];
-                    $this->no_rumah = $customer['no_rumah'];
-                    $this->gang = $customer['gang'];
-                    $this->blok = $customer['blok'];
-                    $this->luas_bangunan = $customer['luas_bangunan'];
-                    $this->jenis_hunian = $customer['jenis_hunian'];
-                    $this->status_kepemilikan = $customer['status_kepemilikan'];
-                    $this->kebutuhan_air_sebelumnya = $customer['kebutuhan_air_sebelumnya'];
-                    $this->kran_diminta = $customer['kran_diminta'];
-                    $this->kwh_pln = $customer['kwh_pln'];
-                    $this->dokumen_ktp = $customer['dokumen_ktp'];
-                    $this->dokumen_kk = $customer['dokumen_kk'];
-                    $this->dokumen_pbb = $customer['dokumen_pbb'];
                     
                     // Customer Information
                     $this->nomor_pelanggan = $customer['nomor_pelanggan'];
@@ -123,8 +85,6 @@ class CustomerForm extends Component
                     $this->area_id = $customer['area']['id'];
                     $this->kecamatan_id = $customer['kecamatan']['id'];
                     $this->desa_id = $customer['desa']['id'];
-                    $this->jenis_pelanggan = $customer['jenis_pelanggan'];
-                    $this->kelompok = $customer['kelompok'];
                     
                     // Location
                     $this->latitude = $customer['latitude'];
@@ -140,12 +100,15 @@ class CustomerForm extends Component
                     ]);
                 } else {
                     session()->flash('error', 'Format respon API tidak sesuai.');
+                    // $this->redirect(route('customers'));
                 }
             } else {
                 session()->flash('error', 'Gagal mengambil data pelanggan dari API. Status: ' . $response->status());
+                // $this->redirect(route('customers'));
             }
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan saat menghubungi API: ' . $e->getMessage());
+            // $this->redirect(route('customers'));
         }
     }
 
@@ -190,23 +153,6 @@ class CustomerForm extends Component
                 'nomor_meteran' => $this->nomor_meteran,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
-                'pekerjaan' => $this->pekerjaan,
-                'rt' => $this->rt,
-                'rw' => $this->rw,
-                'no_rumah' => $this->no_rumah,
-                'gang' => $this->gang,
-                'blok' => $this->blok,
-                'luas_bangunan' => $this->luas_bangunan,
-                'jenis_hunian' => $this->jenis_hunian,
-                'status_kepemilikan' => $this->status_kepemilikan,
-                'kebutuhan_air_sebelumnya' => $this->kebutuhan_air_sebelumnya,
-                'kran_diminta' => $this->kran_diminta,
-                'kwh_pln' => $this->kwh_pln,
-                'dokumen_ktp' => $this->dokumen_ktp,
-                'dokumen_kk' => $this->dokumen_kk,
-                'dokumen_pbb' => $this->dokumen_pbb,
-                'jenis_pelanggan' => $this->jenis_pelanggan,
-                'kelompok' => $this->kelompok,
                 'data_geojson' => [
                     'type' => 'Feature',
                     'geometry' => [
@@ -281,54 +227,6 @@ class CustomerForm extends Component
             (object)['id' => 4, 'nama_kecamatan' => 'Bogor Timur'],
             (object)['id' => 5, 'nama_kecamatan' => 'Bogor Tengah'],
             (object)['id' => 6, 'nama_kecamatan' => 'Tanah Sareal'],
-        ]);
-        
-        // Dummy jenis pelanggan
-        $this->jenisPelangganOptions = collect([
-            (object)['id' => 1, 'nama' => 'Rumah Tangga'],
-            (object)['id' => 2, 'nama' => 'Niaga'],
-            (object)['id' => 3, 'nama' => 'Industri'],
-        ]);
-        
-        // Dummy kelompok (jenis sambungan)
-        $this->kelompokOptions = collect([
-            (object)['id' => 1, 'nama' => 'Sambungan Rumah Tangga'],
-            (object)['id' => 2, 'nama' => 'Sambungan Niaga'],
-            (object)['id' => 3, 'nama' => 'Sambungan Industri'],
-        ]);
-        
-        // Dummy luas bangunan
-        $this->luasBangunanOptions = collect([
-            (object)['id' => 1, 'nama' => '< 50 m²'],
-            (object)['id' => 2, 'nama' => '50 - 100 m²'],
-            (object)['id' => 3, 'nama' => '> 100 m²'],
-        ]);
-        
-        // Dummy jenis hunian
-        $this->jenisHunianOptions = collect([
-            (object)['id' => 1, 'nama' => 'Rumah Tinggal'],
-            (object)['id' => 2, 'nama' => 'Apartemen'],
-            (object)['id' => 3, 'nama' => 'Kantor'],
-        ]);
-        
-        // Dummy status kepemilikan
-        $this->statusKepemilikanOptions = collect([
-            (object)['id' => 1, 'nama' => 'Milik Sendiri'],
-            (object)['id' => 2, 'nama' => 'Sewa'],
-        ]);
-        
-        // Dummy kebutuhan air sebelumnya
-        $this->kebutuhanAirOptions = collect([
-            (object)['id' => 1, 'nama' => 'PDAM'],
-            (object)['id' => 2, 'nama' => 'Sumur Bor'],
-            (object)['id' => 3, 'nama' => 'Air Kemasan'],
-        ]);
-        
-        // Dummy KWh PLN
-        $this->kwhPlnOptions = collect([
-            (object)['id' => 1, 'nama' => '450 VA'],
-            (object)['id' => 2, 'nama' => '900 VA'],
-            (object)['id' => 3, 'nama' => '1300 VA'],
         ]);
         
         if ($this->kecamatan_id) {
@@ -414,4 +312,4 @@ class CustomerForm extends Component
     {
         return view('livewire.customer-form');
     }
-}
+} 

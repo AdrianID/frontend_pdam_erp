@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Dashboard;
 use App\Livewire\DataGrid;
 use App\Http\Middleware\ApiAuth;
+use App\Livewire\CustomerVerifier;
+
 // Guest routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
@@ -19,6 +21,8 @@ Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/pelanggan/{id}', CustomerDetail::class)->name('pelanggan.detail');
     Route::get('/pelanggan/create/new', App\Livewire\CustomerForm::class)->name('pelanggan.create');
     Route::get('/pelanggan/{id}/edit', App\Livewire\CustomerForm::class)->name('pelanggan.edit');
+
+    Route::get('/verif', CustomerVerifier::class)->name('verifikasi.index');
     
     // Profile & Logout routes
     Route::get('/profile', App\Livewire\Profile::class)->name('profile');
