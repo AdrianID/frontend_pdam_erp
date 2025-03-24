@@ -86,7 +86,7 @@ class CustomerForm extends Component
     {
         try {
             // Make API request to get customer data
-            $response = Http::withToken(session('token'))->get("http://45.80.181.85:8001/pelanggan/{$this->customer_id}");
+            $response = Http::get("http://45.80.181.85:8001/pelanggan/{$this->customer_id}");
             
             if ($response->successful()) {
                 $data = $response->json();
@@ -169,86 +169,58 @@ class CustomerForm extends Component
         //     'password' => 'required|string|min:8',
         // ]);
 
-        try {
-            // Prepare data for API with the new structure
-            $customerData = [
-                'user' => [
-                    'username' => $this->username,
-                    'email' => $this->email,
-                    'password' => $this->password,
-                    'role' => 'customer'
+        // Prepare data for API with the new structure
+        $customerData = [
+            'user' => [
+                'username' => $this->username,
+                'email' => $this->email,
+                'password' => $this->password,
+                'role' => 'customer'
+            ],
+            'kecamatan_id' => $this->kecamatan_id,
+            'desa_id' => $this->desa_id ?? 1,
+            'kategori_id' => $this->kategori_id,
+            'area_id' => $this->area_id,
+            'nomor_pelanggan' => $this->nomor_pelanggan ?? 'PLG-' . date('Y') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT),
+            'nama' => $this->nama,
+            'nik' => $this->nik,
+            'alamat' => $this->alamat,
+            'nomor_telp' => $this->nomor_telp,
+            'nomor_meteran' => $this->nomor_meteran,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'pekerjaan' => $this->pekerjaan,
+            'rt' => $this->rt,
+            'rw' => $this->rw,
+            'no_rumah' => $this->no_rumah,
+            'gang' => $this->gang,
+            'blok' => $this->blok,
+            'luas_bangunan' => $this->luas_bangunan,
+            'jenis_hunian' => $this->jenis_hunian,
+            'status_kepemilikan' => $this->status_kepemilikan,
+            'kebutuhan_air_sebelumnya' => $this->kebutuhan_air_sebelumnya,
+            'kran_diminta' => $this->kran_diminta,
+            'kwh_pln' => $this->kwh_pln,
+            'dokumen_ktp' => $this->dokumen_ktp,
+            'dokumen_kk' => $this->dokumen_kk,
+            'dokumen_pbb' => $this->dokumen_pbb,
+            'jenis_pelanggan' => $this->jenis_pelanggan,
+            'kelompok' => $this->kelompok,
+            'data_geojson' => [
+                'type' => 'Feature',
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => [$this->longitude, $this->latitude]
                 ],
-                'kecamatan_id' => $this->kecamatan_id,
-                'desa_id' => $this->desa_id ?? 1,
-                'kategori_id' => $this->kategori_id,
-                'area_id' => $this->area_id,
-                'nomor_pelanggan' => $this->nomor_pelanggan ?? 'PLG-' . date('Y') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT),
-                'nama' => $this->nama,
-                'nik' => $this->nik,
-                'alamat' => $this->alamat,
-                'nomor_telp' => $this->nomor_telp,
-                'nomor_meteran' => $this->nomor_meteran,
-                'latitude' => $this->latitude,
-                'longitude' => $this->longitude,
-                'pekerjaan' => $this->pekerjaan,
-                'rt' => $this->rt,
-                'rw' => $this->rw,
-                'no_rumah' => $this->no_rumah,
-                'gang' => $this->gang,
-                'blok' => $this->blok,
-                'luas_bangunan' => $this->luas_bangunan,
-                'jenis_hunian' => $this->jenis_hunian,
-                'status_kepemilikan' => $this->status_kepemilikan,
-                'kebutuhan_air_sebelumnya' => $this->kebutuhan_air_sebelumnya,
-                'kran_diminta' => $this->kran_diminta,
-                'kwh_pln' => $this->kwh_pln,
-                'dokumen_ktp' => $this->dokumen_ktp,
-                'dokumen_kk' => $this->dokumen_kk,
-                'dokumen_pbb' => $this->dokumen_pbb,
-                'jenis_pelanggan' => $this->jenis_pelanggan,
-                'kelompok' => $this->kelompok,
-                'data_geojson' => [
-                    'type' => 'Feature',
-                    'geometry' => [
-                        'type' => 'Point',
-                        'coordinates' => [$this->longitude, $this->latitude]
-                    ],
-                    'properties' => [
-                        'name' => 'Lokasi Pelanggan ' . $this->nama,
-                        'address' => $this->alamat
-                    ]
+                'properties' => [
+                    'name' => 'Lokasi Pelanggan ' . $this->nama,
+                    'address' => $this->alamat
                 ]
-            ];
-            
-            $response = null;
-            
-            if ($this->customer_id) {
-                // Update existing customer via API
-                $response = Http::withToken(session('token'))
-                    ->put("http://45.80.181.85:8001/pelanggan/{$this->customer_id}", $customerData);
-            } else {
-                // Create new customer via API
-                $response = Http::withToken(session('token'))
-                    ->post("http://45.80.181.85:8001/pelanggan/with-user", $customerData);
-            }
-            
-            if ($response->successful()) {
-                $data = $response->json();
-                
-                if (isset($data['status']) && $data['status'] === true) {
-                    session()->flash('message', $this->customer_id ? 'Pelanggan berhasil diperbarui.' : 'Pelanggan baru berhasil ditambahkan.');
-                    return redirect()->route('pelanggan.index');
-                } else {
-                    session()->flash('error', $data['message'] ?? 'Terjadi kesalahan pada API.');
-                }
-            } else {
-                $errorData = $response->json();
-                $errorMessage = isset($errorData['message']) ? $errorData['message'] : 'Terjadi kesalahan pada server.';
-                session()->flash('error', 'Gagal menyimpan data. ' . $errorMessage . ' (Status: ' . $response->status() . ')');
-            }
-        } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+            ]
+        ];
+
+        // Debugging output
+        dd($customerData);
     }
 
     // Load all related data for dropdowns (dummy data)

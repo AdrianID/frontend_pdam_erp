@@ -22,7 +22,29 @@ Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/pelanggan/create/new', App\Livewire\CustomerForm::class)->name('pelanggan.create');
     Route::get('/pelanggan/{id}/edit', App\Livewire\CustomerForm::class)->name('pelanggan.edit');
 
+
+
+    Route::get('/input-master-spks', App\Livewire\Pelanggan\InputMasterSpks::class)->name('pelanggan.input-master-spks');
+    Route::get('/tambah-pelanggan', App\Livewire\Pelanggan\TambahPelanggan::class)->name('pelanggan.tambah');
     Route::get('/verif', CustomerVerifier::class)->name('verifikasi.index');
+
+    Route::get('/gudang/menu-barang', App\Livewire\Gudang\MenuBarang::class)->name('gudang.menu-barang');
+
+    Route::get('/tagihan/sambungan-baru', App\Livewire\Tagihan\SambunganBaru::class)->name('tagihan.sambungan-baru');
+    Route::get('/tagihan/menu-buat-tagihan', App\Livewire\Tagihan\MenuBuatTagihan::class)->name('tagihan.menu-buat-tagihan');
+
+    Route::get('/naskah-dinas/surat-perintah-kerja', App\Livewire\NaskahDinas\SuratPerintahKerja::class)->name('naskah-dinas.surat-perintah-kerja');
+
+    Route::get('/pengadaan/menu-daftar-vendor', App\Livewire\Pengadaan\MenuDaftarVendor::class)->name('pengadaan.menu-daftar-vendor');
+
+    Route::get('/pembayaran/menu-sambungan-baru', App\Livewire\Pembayaran\MenuSambunganBaru::class)->name('pembayaran.menu-sambungan-baru');
+
+    Route::get('/test-db', function () {
+        $penggunaan = \DB::table('pelanggan')->get();
+        dd($penggunaan);
+    });
+   
+
     
     // Profile & Logout routes
     Route::get('/profile', App\Livewire\Profile::class)->name('profile');
