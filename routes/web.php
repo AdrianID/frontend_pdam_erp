@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Livewire\Auth\Login;
 use App\Livewire\CustomerDetail;
 use Illuminate\Support\Facades\Route;
