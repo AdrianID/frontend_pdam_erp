@@ -29,7 +29,7 @@ class ApiService
         try {
             $headers = [
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVsaTc4QGV4YW1wbGUuY29tIiwicm9sZSI6InBlbGFuZ2dhbiIsImV4cCI6MTc0MjAxNzE4OH0.R70Ycicfi3HvAgDLJN4kC3ZaGcLQ1cXlQFPuhJLQJes',
+                'Authorization' => 'Bearer ' . session('token'),
             ];
 
             $response = $this->client->request($method, $endpoint, [
