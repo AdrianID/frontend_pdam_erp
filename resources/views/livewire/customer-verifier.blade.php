@@ -20,23 +20,14 @@
                             <i class="fas fa-search text-gray-400/75"></i>
                         </div>
                         <input 
-                            wire:model.live.debounce.300ms="search" 
+                            wire:model.debounce.300ms="search" 
                             type="search" 
                             class="block w-full px-8 py-3 bg-gray-50 border-0 text-gray-900 text-sm placeholder:text-gray-400/75 rounded-xl focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:bg-white transition-all duration-200"
                             placeholder="Cari pelanggan..."
                         >
-                        @if($isLoading)
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                                <div class="animate-spin rounded-full h-5 w-5 border-[2.5px] border-gray-200 border-t-blue-600"></div>
-                            </div>
-                        @else
-                            <!-- <button 
-                                wire:click="$set('search', '')" 
-                                class="{{ empty($search) ? 'hidden' : 'absolute inset-y-0 right-0 pr-4 flex items-center' }}"
-                            >
-                                <i class="fas fa-times text-gray-400 hover:text-gray-600 cursor-pointer"></i>
-                            </button> -->
-                        @endif
+                        <div wire:loading wire:target="search" class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                            <div class="animate-spin rounded-full h-5 w-5 border-[2.5px] border-gray-200 border-t-blue-600"></div>
+                        </div>
                     </div>
                     
                     {{-- <button class="text-sm bg-blue-500 text-white hover:bg-blue-700 transition-colors flex items-center px-4 py-2 rounded-lg ml-4">
@@ -68,22 +59,22 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            @forelse($customers as $index => $customer)
+                            @forelse($pelanggan as $index => $customer)
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $index + 1 }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nomor_pelanggan'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nama'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['alamat'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nomor_meteran'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nomor_pelanggan'] ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nama'] ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['alamat'] ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nomor_meteran'] ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full">
-                                        {{ $customer['kategori']['nama_kategori'] }}
+                                        {{ optional($customer['kategori'])['nama_kategori'] ?? 'N/A' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['area']['nama'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ optional($customer['area'])['nama'] ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex space-x-3">
-                                        <a href="{{ route('pelanggan.detail', ['id' => $customer['id']]) }}" 
+                                        <a href="{{ route('pelanggan.detail', ['id' => $customer['id'] ?? null]) }}" 
                                             class="p-2.5 bg-blue-500 hover:bg-blue-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md"
                                             title="Lihat Detail">
                                             <i class="text-white fas fa-eye"></i>
@@ -118,7 +109,6 @@
                         
                         <!-- Pagination Controls -->
                         <div class="flex items-center space-x-2">
-                            <!-- Previous Button -->
                             <button 
                                 wire:click="previousPage" 
                                 class="px-3 py-2 text-sm font-medium {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-blue-600' }} transition-colors"
@@ -126,54 +116,15 @@
                             >
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-
-                            <!-- Page Numbers -->
-                            <div class="flex items-center space-x-1">
-                                @php
-                                    $startPage = max($currentPage - 2, 1);
-                                    $endPage = min($startPage + 4, $lastPage);
-                                    if ($endPage - $startPage < 4) {
-                                        $startPage = max($endPage - 4, 1);
-                                    }
-                                @endphp
-
-                                @if($startPage > 1)
-                                    <button 
-                                        wire:click="gotoPage(1)" 
-                                        class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
-                                    >
-                                        1
-                                    </button>
-                                    @if($startPage > 2)
-                                        <span class="px-2 py-2 text-gray-400">...</span>
-                                    @endif
-                                @endif
-
-                                @for($i = $startPage; $i <= $endPage; $i++)
-                                    <button 
-                                        wire:click="gotoPage({{ $i }})" 
-                                        class="px-3 py-2 text-sm font-medium {{ $i == $currentPage 
-                                            ? 'bg-blue-50 text-blue-600 rounded-lg' 
-                                            : 'text-gray-500 hover:text-blue-600' }} transition-colors"
-                                    >
-                                        {{ $i }}
-                                    </button>
-                                @endfor
-
-                                @if($endPage < $lastPage)
-                                    @if($endPage < $lastPage - 1)
-                                        <span class="px-2 py-2 text-gray-400">...</span>
-                                    @endif
-                                    <button 
-                                        wire:click="gotoPage({{ $lastPage }})" 
-                                        class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
-                                    >
-                                        {{ $lastPage }}
-                                    </button>
-                                @endif
-                            </div>
-
-                            <!-- Next Button -->
+                            <!-- Dynamic Page Numbers -->
+                            @foreach(range(1, $lastPage) as $i)
+                                <button 
+                                    wire:click="gotoPage({{ $i }})" 
+                                    class="px-3 py-2 text-sm font-medium {{ $i == $currentPage ? 'bg-blue-50 text-blue-600 rounded-lg' : 'text-gray-500 hover:text-blue-600' }} transition-colors"
+                                >
+                                    {{ $i }}
+                                </button>
+                            @endforeach
                             <button 
                                 wire:click="nextPage" 
                                 class="px-3 py-2 text-sm font-medium {{ $currentPage == $lastPage ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-blue-600' }} transition-colors"
