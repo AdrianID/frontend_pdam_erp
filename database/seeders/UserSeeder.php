@@ -17,12 +17,19 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         
+        // Argon2id options
+        $hashOptions = [
+            'memory' => 65536,    // 64MB
+            'threads' => 4,       // 4 threads
+            'time' => 4          // 4 iterations
+        ];
+        
         // Create admin user
         DB::table('users')->insert([
             'username' => 'admin',
             'name' => 'Administrator',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password123', ['memory' => 65536, 'time' => 4, 'threads' => 3]),
+            'password' => Hash::make('password123', $hashOptions),
             'role_id' => 1, // admin role
             'status' => 'active',
             'created_at' => now(),
@@ -35,7 +42,7 @@ class UserSeeder extends Seeder
                 'username' => $faker->unique()->userName,
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
-                'password' => Hash::make('password123', ['memory' => 65536, 'time' => 4, 'threads' => 3]),
+                'password' => Hash::make('password123', $hashOptions),
                 'role_id' => $faker->randomElement([2, 3]), // manager or staff
                 'status' => 'active',
                 'created_at' => now(),

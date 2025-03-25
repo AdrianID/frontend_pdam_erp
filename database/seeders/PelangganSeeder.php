@@ -30,8 +30,13 @@ class PelangganSeeder extends Seeder
             $numberOfPelanggan = rand(5, 10);
             
             for ($i = 0; $i < $numberOfPelanggan; $i++) {
-                $nomorPelanggan = 'PLG-' . str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
-                $nomorMeteran = 'MTR-' . str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+                do {
+                    $nomorPelanggan = 'PLG-' . str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+                } while (DB::table('pelanggan')->where('nomor_pelanggan', $nomorPelanggan)->exists());
+
+                do {
+                    $nomorMeteran = 'MTR-' . str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+                } while (DB::table('pelanggan')->where('nomor_meteran', $nomorMeteran)->exists());
                 
                 DB::table('pelanggan')->insert([
                     'kecamatan_id' => $area->kecamatan_id,
@@ -45,7 +50,8 @@ class PelangganSeeder extends Seeder
                     'nomor_kk' => $faker->unique()->numerify('3######'),
                     'nomor_sertifikat' => $faker->boolean(70) ? $faker->numerify('SERT-####') : null,
                     'nomor_telp' => $faker->phoneNumber,
-                    'nama' => $faker->name,
+                    'pekerjaan' => $faker->jobTitle,
+                    'status' => $faker->randomElement(['pending', 'verified', 'billing', 'paid', 'installation', 'active', 'inactive', 'terminated']),
                     'nik' => $faker->unique()->numerify('3###############'),
                     'alamat' => $faker->address,
                     'rt' => str_pad(rand(1, 20), 3, '0', STR_PAD_LEFT),

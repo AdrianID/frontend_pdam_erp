@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('nomor_kk')->unique();
             $table->string('nomor_sertifikat')->nullable();
             $table->string('nomor_telp');
-            $table->string('nama');
+            $table->string('nama_pelanggan');
             $table->string('nik')->unique();
             $table->text('alamat');
             $table->string('rt');
@@ -41,8 +41,19 @@ return new class extends Migration
             $table->string('file_sertifikat')->nullable();
             $table->string('file_ktp')->nullable();
             $table->string('file_kk')->nullable();
+            $table->string('pekerjaan')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
+            $table->enum('status', [
+                'pending',         // Status awal setelah registrasi
+                'verified',        // Setelah admin verifikasi data
+                'billing',         // Menunggu pembayaran tagihan
+                'paid',            // Tagihan sudah dibayar
+                'installation',    // Proses pemasangan oleh vendor
+                'active',          // Pemasangan selesai dan pelanggan aktif
+                'inactive',        // Pelanggan dinonaktifkan
+                'terminated'       // Kontrak diakhiri
+            ])->default('pending');
             $table->json('data_geojson')->nullable();
             $table->timestamps();
             $table->softDeletes();
