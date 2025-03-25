@@ -14,8 +14,14 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
+        'guard' => 'web',
+        'passwords' => 'users',
+        'hash' => [
+            'driver' => 'argon2id',
+            'memory' => 65536,  // 64MB
+            'threads' => 4,     // 4 threads
+            'time' => 4,       // 4 iterations
+        ],
     ],
 
     /*
