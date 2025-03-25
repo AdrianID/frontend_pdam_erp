@@ -111,6 +111,12 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
+                        <a href="{{ route('tagihan.daftar-tagihan') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                            <i class="fas fa-list mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Daftar Tagihan</span>
+                        </a>
+                    </li>
+                    <li class="pl-12 pr-4">
                         <a href="{{ route('tagihan.menu-buat-tagihan') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-file-invoice mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Buat Tagihan</span>
@@ -209,7 +215,13 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('gudang.tambah-barang') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                            <i class="fas fa-cubes mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Tambah Barang</span>
+                        </a>
+                    </li>
+                    <li class="pl-12 pr-4">
+                        <a href="{{ route('gudang.stok-barang') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-boxes mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Stok Barang</span>
                         </a>
@@ -226,12 +238,7 @@
                             <span>Pengiriman Barang</span>
                         </a>
                     </li>
-                    <li class="pl-12 pr-4">
-                        <a href="{{ route('gudang.menu-barang') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                            <i class="fas fa-cubes mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Menu Barang</span>
-                        </a>
-                    </li>
+                    
                 </ul>
             </li>
 
@@ -277,15 +284,15 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
-                        <a href="{{ route('pengadaan.menu-daftar-vendor') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                            <i class="fas fa-list mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Daftar Vendor</span>
-                        </a>
-                    </li>
-                    <li class="pl-12 pr-4">
                         <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-plus-square mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Tambah Vendor</span>
+                        </a>
+                    </li>
+                    <li class="pl-12 pr-4">
+                        <a href="{{ route('pengadaan.menu-daftar-vendor') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                            <i class="fas fa-list mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Daftar Vendor</span>
                         </a>
                     </li>
                     <li class="pl-12 pr-4">

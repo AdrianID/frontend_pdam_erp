@@ -29,6 +29,83 @@
 
         <form wire:submit.prevent="save">
             <!-- Informasi Pelanggan Card -->
+
+            <!-- Password Section - Hanya ditampilkan saat tambah baru -->
+            @if(!isset($customer))
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm mb-8">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-800">Buat Akun</h2>
+                </div>
+                <div class="p-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="name" wire:model="name" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                        @error('name') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" id="username" wire:model="username" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                        @error('username') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" wire:model="email" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                        @error('email') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                            Password
+                        </label>
+                        <input type="password" id="password" wire:model="password" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                        @error('password') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
+                            Konfirmasi Password
+                        </label>
+                        <input type="password" id="password_confirmation" wire:model="password_confirmation" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                        @error('password_confirmation') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+            </div>
+            @else
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm mb-8">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-800">Ubah Akun (Opsional)</h2>
+                </div>
+                <div class="p-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name (Optional)</label>
+                        <input type="text" id="name" wire:model="name" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                        @error('name') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username (Optional)</label>
+                        <input type="text" id="username" wire:model="username" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                        @error('username') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
+                        <input type="email" id="email" wire:model="email" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                        @error('email') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                            Password Baru (Opsional)
+                        </label>
+                        <input type="password" id="password" wire:model="password" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                        @error('password') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
+                            Konfirmasi Password Baru
+                        </label>
+                        <input type="password" id="password_confirmation" wire:model="password_confirmation" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                        @error('password_confirmation') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+            </div>
+            @endif
             <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm mb-8">
                 <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
                     <div class="flex items-center">
@@ -38,6 +115,8 @@
                         <h2 class="text-lg font-medium text-gray-800">Informasi Pelanggan</h2>
                     </div>
                 </div>
+
+                
                 
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-4">
@@ -153,11 +232,18 @@
                             @error('nik') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
 
-                        <!-- Nama Lengkap -->
+                        <!-- Nomor KK -->
+                        <div>
+                            <label for="nomor_kk" class="block text-sm font-medium text-gray-700 mb-1">Nomor KK</label>
+                            <input type="text" id="nomor_kk" wire:model="nomor_kk" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                            @error('nomor_kk') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Nama Pelanggan -->
                         <div class="md:col-span-2">
-                            <label for="nama_lengkap" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                            <input type="text" id="nama_lengkap" wire:model="nama_lengkap" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
-                            @error('nama_lengkap') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                            <label for="nama_pelanggan" class="block text-sm font-medium text-gray-700 mb-1">Nama Pelanggan</label>
+                            <input type="text" id="nama_pelanggan" wire:model="nama_pelanggan" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" required />
+                            @error('nama_pelanggan') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Pekerjaan -->

@@ -12,14 +12,14 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_surat')->unique();
             $table->date('tanggal_surat');
-            $table->foreignId('vendor_id')->constrained('vendors');
+            $table->foreignId('vendor_id')->constrained('vendor');
             $table->text('alamat_vendor');
             $table->enum('perihal', [
                 'pemasangan_sambungan_baru',
                 'pemeliharaan_sambungan',
                 'perbaikan_meter'
             ]);
-            $table->foreignId('permohonan_id')->constrained('permohonan');
+            // $table->foreignId('permohonan_id')->constrained('permohonan');
             $table->string('nama_pemohon');
             $table->text('alamat_pemohon');
             $table->string('nomor_telp_pemohon');

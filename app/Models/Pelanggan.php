@@ -24,7 +24,7 @@ class Pelanggan extends Model
         'nomor_kk',
         'nomor_sertifikat',
         'nomor_telp',
-        'nama',
+        'nama_pelanggan',
         'nik',
         'alamat',
         'rt',
@@ -43,15 +43,20 @@ class Pelanggan extends Model
         'file_kk',
         'latitude',
         'longitude',
-        'data_geojson'
+        'data_geojson',
+        'pekerjaan',
+        'status',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
-    // protected $casts = [
-    //     'luas_bangunan' => 'decimal:2',
-    //     'kebutuhan_air_awal' => 'decimal:2',
-    //     'latitude' => 'decimal:8',
-    //     'longitude' => 'decimal:8'
-    // ];
+    protected $casts = [
+        'luas_bangunan' => 'decimal:2',
+        'kebutuhan_air_awal' => 'integer',
+        'latitude' => 'decimal:10,8',
+        'longitude' => 'decimal:11,8'
+    ];
 
     public function areaDistrik()
     {

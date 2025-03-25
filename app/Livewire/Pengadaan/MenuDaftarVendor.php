@@ -2,55 +2,42 @@
 
 namespace App\Livewire\Pengadaan;
 
-use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+use App\Models\Vendor;
+use Livewire\Attributes\Layout;
 
 class MenuDaftarVendor extends Component
 {
-    use WithFileUploads;
+    use WithPagination;
 
-    public $jenis_vendor;
-    public $nama_vendor;
-    public $alamat;
-    public $nomor_telp;
-    public $nomor_surat_perjanjian;
-    public $tanggal_surat_perjanjian;
-    public $file_surat_perjanjian;
-    public $status;
-    public $rating = 5;
-    public $keterangan;
+    public $search = '';
+    public $perPage = 10;
+    public $sortField = 'nama_vendor';
+    public $sortDirection = 'asc';
 
-    public function mount()
+    public function sortBy($field)
     {
-        // Data dummy untuk keperluan pengembangan
-        $this->jenis_vendor = 'jasa_pemasangan';
-        $this->nama_vendor = 'Vendor Contoh';
-        $this->alamat = 'Jl. Contoh No. 123';
-        $this->nomor_telp = '081234567890';
-        $this->nomor_surat_perjanjian = 'SP/123/2023';
-        $this->tanggal_surat_perjanjian = '2023-10-01';
-        $this->status = 'aktif';
-        $this->keterangan = 'Vendor terpercaya dengan pengalaman lebih dari 10 tahun.';
-    }
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
 
-    public function resetForm()
-    {
-        $this->reset([
-            'jenis_vendor', 'nama_vendor', 'alamat', 'nomor_telp', 
-            'nomor_surat_perjanjian', 'tanggal_surat_perjanjian', 
-            'file_surat_perjanjian', 'status', 'rating', 'keterangan'
-        ]);
-    }
-
-    public function save()
-    {
-        // Logika untuk menyimpan data
+        $this->sortField = $field;
     }
 
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.pengadaan.menu-daftar-vendor');
+        return view('livewire.pengadaan.menu-daftar-vendor', [
+            'vendors' => Vendor::when($this->search, function ($query) {
+                    return $query->where('nama_vendor', 'like', '%'.$this->search.'%')
+                                ->orWhere('nomor_telp', 'like', '%'.$this->search.'%')
+                                ->orWhere('email', 'like', '%'.$this->search.'%');
+                })
+                ->orderBy($this->sortField, $this->sortDirection)
+                ->paginate($this->perPage)
+        ]);
     }
 }
