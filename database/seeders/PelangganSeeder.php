@@ -16,15 +16,6 @@ class PelangganSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         
-        // Get staff/manager users (role 2 atau 3)
-        $petugas = DB::table('users')
-            ->whereIn('role_id', [2, 3])
-            ->pluck('id')
-            ->toArray();
-
-        if (empty($petugas)) {
-            throw new \Exception('Tidak ada user dengan role staff/manager. Jalankan UserSeeder terlebih dahulu.');
-        }
         
         // Get all necessary IDs
         $subAreaDistriks = DB::table('sub_area_distrik')
@@ -54,7 +45,6 @@ class PelangganSeeder extends Seeder
                     'kategori_id' => $faker->randomElement($kategoriIds),
                     'area_distrik_id' => $area->area_id,
                     'sub_area_distrik_id' => $area->sub_area_id,
-                    'user_id' => $faker->randomElement($petugas), // Assign random staff/manager
                     'jenis_pelanggan' => $faker->randomElement(['Rumah Tangga', 'Bisnis', 'Industri']),
                     'nomor_pelanggan' => $nomorPelanggan,
                     'nomor_meteran' => $nomorMeteran,
