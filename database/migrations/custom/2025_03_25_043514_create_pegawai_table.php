@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('jabatan_id')->constrained('jabatan')->onDelete('restrict');
             $table->foreignId('tempat_id')->constrained('tempat')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
             $table->string('nik')->unique();
             $table->string('nip')->unique();
             $table->string('jabatan');

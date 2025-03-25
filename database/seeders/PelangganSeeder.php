@@ -16,6 +16,16 @@ class PelangganSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         
+        // Get staff/manager users (role 2 atau 3)
+        $petugas = DB::table('users')
+            ->whereIn('role_id', [2, 3])
+            ->pluck('id')
+            ->toArray();
+
+        if (empty($petugas)) {
+            throw new \Exception('Tidak ada user dengan role staff/manager. Jalankan UserSeeder terlebih dahulu.');
+        }
+        
         // Get all necessary IDs
         $subAreaDistriks = DB::table('sub_area_distrik')
             ->join('area_distrik', 'sub_area_distrik.area_distrik_id', '=', 'area_distrik.id')
@@ -44,12 +54,14 @@ class PelangganSeeder extends Seeder
                     'kategori_id' => $faker->randomElement($kategoriIds),
                     'area_distrik_id' => $area->area_id,
                     'sub_area_distrik_id' => $area->sub_area_id,
+                    'user_id' => $faker->randomElement($petugas), // Assign random staff/manager
                     'jenis_pelanggan' => $faker->randomElement(['Rumah Tangga', 'Bisnis', 'Industri']),
                     'nomor_pelanggan' => $nomorPelanggan,
                     'nomor_meteran' => $nomorMeteran,
                     'nomor_kk' => $faker->unique()->numerify('3######'),
                     'nomor_sertifikat' => $faker->boolean(70) ? $faker->numerify('SERT-####') : null,
                     'nomor_telp' => $faker->phoneNumber,
+                    'nama_pelanggan' => $faker->name,
                     'pekerjaan' => $faker->jobTitle,
                     'status' => $faker->randomElement(['pending', 'verified', 'billing', 'paid', 'installation', 'active', 'inactive', 'terminated']),
                     'nik' => $faker->unique()->numerify('3###############'),
