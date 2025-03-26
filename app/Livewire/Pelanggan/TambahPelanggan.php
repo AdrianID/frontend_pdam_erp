@@ -47,8 +47,8 @@ class TambahPelanggan extends Component
     public $dokumen_kk;
     public $dokumen_pbb;
     public $no_telepon;
-    public $latitude;
-    public $longitude;
+    // public $latitude;
+    // public $longitude;
     public $nomorPelanggan;
     public $nomorMeteran;
     public $nomor_kk;
@@ -73,6 +73,16 @@ class TambahPelanggan extends Component
     public $kebutuhanAirOptions = [];
     public $kwhPlnOptions = [];
 
+    public $latitude = -6.2088;
+    public $longitude = 106.8456;
+    
+    protected $listeners = ['updateMapPosition'];
+    
+    public function updateMapPosition($lat, $lng)
+    {
+        $this->latitude = $lat;
+        $this->longitude = $lng;
+    }
     #[Layout('layouts.app')]
     public function render()
     {
@@ -210,15 +220,15 @@ class TambahPelanggan extends Component
             'jenis_hunian' => 'required|string|max:255',
             'status_kepemilikan' => 'required|string|max:255',
             'kebutuhan_air_sebelumnya' => 'required|integer',
-            'kran_diminta' => 'required|integer',
+            'kran_diminta' => 'required|numeric',
             'kwh_pln' => 'nullable|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'dokumen_ktp' => 'nullable|image|max:2048',
             'dokumen_kk' => 'nullable|image|max:2048',
             'dokumen_pbb' => 'nullable|file|mimes:pdf|max:2048',
-            'nomorPelanggan' => 'required|string|max:255|unique:pelanggan,nomor_pelanggan,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
-            'nomorMeteran' => 'nullable|string|max:255|unique:pelanggan,nomor_meteran,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
+            // 'nomorPelanggan' => '|string|max:255|unique:pelanggan,nomor_pelanggan,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
+            // 'nomorMeteran' => '|string|max:255|unique:pelanggan,nomor_meteran,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
             'no_telepon' => 'required|string|max:255',
             'nomor_kk' => 'required|string|max:255|unique:pelanggan,nomor_kk,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
             
