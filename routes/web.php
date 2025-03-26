@@ -28,6 +28,7 @@ Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/input-master-spks', App\Livewire\Pelanggan\InputMasterSpks::class)->name('pelanggan.input-master-spks');
     Route::get('/tambah-pelanggan', App\Livewire\Pelanggan\TambahPelanggan::class)->name('pelanggan.tambah');
     Route::get('/verif', CustomerVerifier::class)->name('verifikasi.index');
+    Route::get('/aktivasi', App\Livewire\Pelanggan\AktivasiPelanggan::class)->name('pelanggan.aktivasi');
 
     Route::get('/gudang/menu-barang', App\Livewire\Gudang\TambahBarang::class)->name('gudang.tambah-barang');
     Route::get('/gudang/stok-barang', App\Livewire\Gudang\StokBarang::class)->name('gudang.stok-barang');

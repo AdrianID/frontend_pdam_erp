@@ -43,6 +43,12 @@
                         </a>
                     </li>
                     <li class="pl-12 pr-4">
+                        <a href="{{ route('pelanggan.aktivasi') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                            <i class="fas fa-user-cog mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Aktivasi Pelanggan</span>
+                        </a>
+                    </li>
+                    <li class="pl-12 pr-4">
                         <a href="{{ route('pelanggan.index') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-address-card mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Data Induk Pelanggan</span>
