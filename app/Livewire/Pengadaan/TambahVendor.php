@@ -118,6 +118,7 @@ class TambahVendor extends Component
 
             session()->flash('success', 'Vendor berhasil ditambahkan!');
             $this->resetForm();
+            return redirect()->route('pengadaan.menu-daftar-vendor');
 
         } catch (\Exception $e) {
             // Commenting out file deletion on error

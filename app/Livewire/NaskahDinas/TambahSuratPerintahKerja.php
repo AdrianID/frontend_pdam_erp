@@ -5,6 +5,7 @@ namespace App\Livewire\NaskahDinas;
 use Livewire\Component;
 use App\Models\Vendor;
 use App\Models\SuratPerintahKerja;
+use App\Models\Pelanggan; // Add this import
 use Carbon\Carbon;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\DB;
@@ -28,56 +29,12 @@ class TambahSuratPerintahKerja extends Component
     public $vendorList = [];
     public $permohonanList = [];
 
-    // Dummy data for permohonan
-    protected $dummyPermohonan = [
-        [
-            'id' => 1,
-            'nomor_permohonan' => 'Permohonan-001',
-            'nama_pemohon' => 'John Doe',
-            'alamat' => 'Jl. Merdeka No. 123, Jakarta',
-            'telepon' => '081234567890',
-            'koordinat' => '-6.175392, 106.827153',
-        ],
-        [
-            'id' => 2,
-            'nomor_permohonan' => 'Permohonan-002',
-            'nama_pemohon' => 'Jane Smith',
-            'alamat' => 'Jl. Sudirman No. 456, Jakarta',
-            'telepon' => '082345678901',
-            'koordinat' => '-6.225013, 106.800446',
-        ],
-        [
-            'id' => 3,
-            'nomor_permohonan' => 'Permohonan-003',
-            'nama_pemohon' => 'Robert Johnson',
-            'alamat' => 'Jl. Thamrin No. 789, Jakarta',
-            'telepon' => '083456789012',
-            'koordinat' => '-6.186486, 106.834091',
-        ],
-        [
-            'id' => 4,
-            'nomor_permohonan' => 'Permohonan-004',
-            'nama_pemohon' => 'Sarah Williams',
-            'alamat' => 'Jl. Gatot Subroto No. 321, Jakarta',
-            'telepon' => '084567890123',
-            'koordinat' => '-6.221830, 106.819500',
-        ],
-        [
-            'id' => 5,
-            'nomor_permohonan' => 'Permohonan-005',
-            'nama_pemohon' => 'Michael Brown',
-            'alamat' => 'Jl. HR Rasuna Said No. 654, Jakarta',
-            'telepon' => '085678901234',
-            'koordinat' => '-6.224015, 106.833156',
-        ],
-    ];
-
     protected $rules = [
         'nomor_surat' => 'required|unique:surat_perintah_kerja,nomor_surat',
         'tanggal_surat' => 'required|date',
         'kepada' => 'required|exists:vendor,id',
         'perihal' => 'required|in:pemasangan_sambungan_baru,pemeliharaan_sambungan,perbaikan_meter',
-        'nomor_permohonan' => 'required|numeric',
+        'nomor_permohonan' => 'required|exists:pelanggan,id',
         'waktu_kerja' => 'required|integer|min:1',
         'keterangan' => 'nullable|string',
     ];
@@ -85,9 +42,22 @@ class TambahSuratPerintahKerja extends Component
     public function mount()
     {
         $this->vendorList = Vendor::select('id', 'nama_vendor', 'alamat', 'telepon')->get()->toArray();
-        $this->permohonanList = array_map(function($item) {
-            return ['id' => $item['id'], 'nomor_permohonan' => $item['nomor_permohonan']];
-        }, $this->dummyPermohonan);
+        
+        // Get paid customers for permohonan list
+        $this->permohonanList = Pelanggan::where('status', 'paid')
+            ->select('id', 'nomor_pelanggan as nomor_permohonan', 'nama_pelanggan', 'alamat', 'nomor_telp', DB::raw("CONCAT(latitude, ',', longitude) as koordinat"))
+            ->get()
+            ->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'nomor_permohonan' => $item->nomor_permohonan,
+                    'nama_pemohon' => $item->nama_pelanggan,
+                    'alamat' => $item->alamat,
+                    'telepon' => $item->nomor_telp,
+                    'koordinat' => $item->koordinat
+                ];
+            })->toArray();
+            
         $this->tanggal_surat = now()->format('Y-m-d');
     }
 
@@ -96,7 +66,7 @@ class TambahSuratPerintahKerja extends Component
         $vendor = collect($this->vendorList)->firstWhere('id', $this->kepada);
         if ($vendor) {
             $this->alamat_vendor = $vendor['alamat'];
-            $this->nomor_telp_pemohon = $vendor['telepon'] ?? ''; // Using vendor's phone if needed
+            $this->nomor_telp_pemohon = $vendor['telepon'] ?? '';
         } else {
             $this->alamat_vendor = '';
         }
@@ -104,7 +74,7 @@ class TambahSuratPerintahKerja extends Component
 
     public function loadPelangganData()
     {
-        $permohonan = collect($this->dummyPermohonan)->firstWhere('id', $this->nomor_permohonan);
+        $permohonan = collect($this->permohonanList)->firstWhere('id', $this->nomor_permohonan);
         if ($permohonan) {
             $this->nama_pemohon = $permohonan['nama_pemohon'];
             $this->alamat_pemohon = $permohonan['alamat'];
@@ -126,7 +96,6 @@ class TambahSuratPerintahKerja extends Component
     {
         if ($this->tanggal_surat && $this->waktu_kerja) {
             try {
-                // Ensure waktu_kerja is treated as a number
                 $daysToAdd = is_numeric($this->waktu_kerja) ? (int)$this->waktu_kerja : 0;
                 $masaKerja = Carbon::parse($this->tanggal_surat)->addDays($daysToAdd);
                 $this->masa_kerja = $masaKerja->format('Y-m-d');
@@ -151,7 +120,7 @@ class TambahSuratPerintahKerja extends Component
                 'vendor_id' => $this->kepada,
                 'alamat_vendor' => $this->alamat_vendor,
                 'perihal' => $this->perihal,
-                // 'permohonan_id' => $this->nomor_permohonan,
+                'pelanggan_id' => $this->nomor_permohonan,
                 'nama_pemohon' => $this->nama_pemohon,
                 'alamat_pemohon' => $this->alamat_pemohon,
                 'nomor_telp_pemohon' => $this->nomor_telp_pemohon,
@@ -184,9 +153,19 @@ class TambahSuratPerintahKerja extends Component
         $this->reset();
         $this->tanggal_surat = now()->format('Y-m-d');
         $this->vendorList = Vendor::select('id', 'nama_vendor', 'alamat', 'telepon')->get()->toArray();
-        $this->permohonanList = array_map(function($item) {
-            return ['id' => $item['id'], 'nomor_permohonan' => $item['nomor_permohonan']];
-        }, $this->dummyPermohonan);
+        $this->permohonanList = Pelanggan::where('status', 'paid')
+            ->select('id', 'nomor_pelanggan as nomor_permohonan', 'nama_pelanggan', 'alamat', 'nomor_telp', DB::raw("CONCAT(latitude, ',', longitude) as koordinat"))
+            ->get()
+            ->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'nomor_permohonan' => $item->nomor_permohonan,
+                    'nama_pemohon' => $item->nama_pelanggan,
+                    'alamat' => $item->alamat,
+                    'telepon' => $item->nomor_telp,
+                    'koordinat' => $item->koordinat
+                ];
+            })->toArray();
     }
 
     #[Layout('layouts.app')]

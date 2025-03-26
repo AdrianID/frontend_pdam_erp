@@ -61,14 +61,14 @@
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
                     <div class="relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        {{-- <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
-                        </div>
+                        </div> --}}
                         <input 
                             type="text" 
                             wire:model.live.debounce.300ms="search"
                             placeholder="Cari berdasarkan nama/kode..."
-                            class="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+                            class="block w-full pl-6 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
                         >
                     </div>
                 </div>

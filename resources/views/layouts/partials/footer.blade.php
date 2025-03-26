@@ -1,29 +1,33 @@
-<footer class="pt-4">
+<footer class="pt-4 bg-blue-50 border-t border-blue-100">
     <div class="w-full px-6 mx-auto">
         <div class="flex flex-wrap items-center -mx-3 lg:justify-between">
             <div class="w-full max-w-full px-3 mt-0 mb-6 shrink-0 lg:mb-0 lg:w-1/2 lg:flex-none">
-                <div class="text-sm leading-normal text-center text-slate-500 lg:text-left">
-                    ©{{ date('Y') }} made with <i class="fa fa-heart"></i> by
-                    <a href="https://www.creative-tim.com" class="font-semibold text-slate-700" target="_blank">Creative Tim</a>
-                    for a better web.
+                <div class="text-sm leading-normal text-center text-blue-800 lg:text-left">
+                    ©{{ date('Y') }} PDAM Giri Tirta Gresik
+                    <div class="mt-1 text-xs text-blue-600">
+                        Melayani dengan setia untuk kesejahteraan masyarakat Gresik
+                    </div>
                 </div>
             </div>
             <div class="w-full max-w-full px-3 mt-0 shrink-0 lg:w-1/2 lg:flex-none">
                 <ul class="flex flex-wrap justify-center pl-0 mb-0 list-none lg:justify-end">
                     <li class="nav-item">
-                        <a href="https://www.creative-tim.com" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">Creative Tim</a>
+                        <a href="/tentang-kami" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-blue-800 hover:text-blue-600">Tentang Kami</a>
                     </li>
                     <li class="nav-item">
-                        <a href="https://www.creative-tim.com/presentation" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">About Us</a>
+                        <a href="/layanan" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-blue-800 hover:text-blue-600">Layanan</a>
                     </li>
                     <li class="nav-item">
-                        <a href="https://creative-tim.com/blog" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">Blog</a>
+                        <a href="/tarif" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-blue-800 hover:text-blue-600">Tarif Air</a>
                     </li>
                     <li class="nav-item">
-                        <a href="https://www.creative-tim.com/license" class="block px-4 pt-0 pb-1 pr-0 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">License</a>
+                        <a href="/kontak" class="block px-4 pt-0 pb-1 pr-0 text-sm font-normal transition-colors ease-soft-in-out text-blue-800 hover:text-blue-600">Hubungi Kami</a>
                     </li>
                 </ul>
             </div>
         </div>
+        <div class="text-center text-xs text-blue-600 mt-4">
+            Jl. ... Gresik | Telp: (031) ... | Email: info@pdam-giritirta-gresik.go.id
+        </div>
     </div>
-</footer> 
+</footer>

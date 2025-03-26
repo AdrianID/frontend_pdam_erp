@@ -284,7 +284,7 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('pengadaan.tambah-vendor') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-plus-square mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Tambah Vendor</span>
                         </a>

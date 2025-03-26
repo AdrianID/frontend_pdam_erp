@@ -94,7 +94,7 @@
                         class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-600 focus:border-indigo-600 select2">
                         <option value="">Pilih Nomor Permohonan</option>
                         @foreach($permohonanList as $permohonan)
-                            <option value="{{ $permohonan['id'] }}">{{ $permohonan['nomor_permohonan'] }}</option>
+                            <option value="{{ $permohonan['id'] }}">{{ $permohonan['id'] }}</option>
                         @endforeach
                     </select>
                     @error('nomor_permohonan') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
