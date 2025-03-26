@@ -37,6 +37,7 @@ Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/tagihan/daftar-tagihan', App\Livewire\Tagihan\DaftarTagihan::class)->name('tagihan.daftar-tagihan');
 
     Route::get('/naskah-dinas/tambah-surat-perintah-kerja', App\Livewire\NaskahDinas\TambahSuratPerintahKerja::class)->name('naskah-dinas.surat-perintah-kerja');
+    Route::get('/naskah-dinas/daftar-spk', App\Livewire\NaskahDinas\DaftarSPK::class)->name('naskah-dinas.daftar-spk');
     
     Route::get('/pengadaan/menu-daftar-vendor', App\Livewire\Pengadaan\MenuDaftarVendor::class)->name('pengadaan.menu-daftar-vendor');
     Route::get('/pengadaan/tambah-vendor', App\Livewire\Pengadaan\TambahVendor::class)->name('pengadaan.tambah-vendor');

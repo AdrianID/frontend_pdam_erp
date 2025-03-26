@@ -278,10 +278,9 @@
                             <label for="kelompok" class="block text-sm font-medium text-gray-700 mb-1">Kelompok</label>
                             <select id="kelompok" wire:model="kelompok" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
                                 <option value="">Pilih Kelompok</option>
-                                <option value="1">Domestik</option>
-                                <option value="2">Niaga</option>
-                                <option value="3">Industri</option>
-                                <option value="4">Instansi</option>
+                                @foreach($kategoriOptions as $option)
+                                    <option value="{{ $option->id }}">{{ $option->nama_kategori }}</option>
+                                @endforeach
                             </select>
                             @error('kelompok') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
@@ -354,15 +353,15 @@
                         </div>
 
                         {{-- ... existing form fields ... --}}
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="nomorPelanggan">Nomor Pelanggan</label>
                             <input type="text" class="form-control" id="nomorPelanggan" wire:model="nomorPelanggan" readonly>
-                        </div>
+                        </div> --}}
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="nomorMeteran">Nomor Meteran</label>
                             <input type="text" class="form-control" id="nomorMeteran" wire:model="nomorMeteran" readonly>
-                        </div>
+                        </div> --}}
                         {{-- ... remaining form fields ... --}}
                     </div>
                 </div>

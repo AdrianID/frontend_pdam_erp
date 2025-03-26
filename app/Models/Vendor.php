@@ -20,7 +20,8 @@ class Vendor extends Model
         'status',
         'rating',
         'keterangan',
-        'tanggal_bergabung'
+        'tanggal_bergabung',
+        'user_id',
     ];
 
     protected $casts = [

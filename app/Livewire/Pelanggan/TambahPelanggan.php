@@ -8,6 +8,7 @@ use App\Models\AreaDistrik;
 use App\Models\SubAreaDistrik;
 use App\Models\Kecamatan;
 use App\Models\Desa;
+use App\Models\Kategori;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
@@ -75,11 +76,13 @@ class TambahPelanggan extends Component
     #[Layout('layouts.app')]
     public function render()
     {
+        $kategori = Kategori::all();
         return view('livewire.pelanggan.tambah-pelanggan', [
             'distrikOptions' => $this->distrikOptions,
             'subAreaDistrikOptions' => $this->subAreaDistrikOptions,
             'kecamatanOptions' => $this->kecamatanOptions,
             'desaOptions' => $this->desaOptions,
+            'kategoriOptions' => $kategori,
         ]);
     }
 
@@ -215,7 +218,7 @@ class TambahPelanggan extends Component
             'dokumen_kk' => 'nullable|image|max:2048',
             'dokumen_pbb' => 'nullable|file|mimes:pdf|max:2048',
             'nomorPelanggan' => 'required|string|max:255|unique:pelanggan,nomor_pelanggan,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
-            'nomorMeteran' => 'required|string|max:255|unique:pelanggan,nomor_meteran,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
+            'nomorMeteran' => 'nullable|string|max:255|unique:pelanggan,nomor_meteran,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
             'no_telepon' => 'required|string|max:255',
             'nomor_kk' => 'required|string|max:255|unique:pelanggan,nomor_kk,'.($this->pelanggan ? $this->pelanggan->id : 'NULL'),
             
@@ -346,14 +349,16 @@ class TambahPelanggan extends Component
 
     protected function generateNomorPelanggan()
     {
-        $count = Pelanggan::count() + 1;
-        $this->nomorPelanggan = 'PLG-' . date('Ym') . str_pad($count, 5, '0', STR_PAD_LEFT);
+        $this->nomorPelanggan = null;
+        // $count = Pelanggan::count() + 1;
+        // $this->nomorPelanggan = 'PLG-' . date('Ym') . str_pad($count, 5, '0', STR_PAD_LEFT);
     }
 
     protected function generateNomorMeteran()
     {
-        $count = Pelanggan::count() + 1;
-        $this->nomorMeteran = 'MTR-' . date('Ym') . str_pad($count, 5, '0', STR_PAD_LEFT);
+        // $count = Pelanggan::count() + 1;
+        // $this->nomorMeteran = 'MTR-' . date('Ym') . str_pad($count, 5, '0', STR_PAD_LEFT);
+        $this->nomorMeteran = null;
     }
 
     public function cancel()
