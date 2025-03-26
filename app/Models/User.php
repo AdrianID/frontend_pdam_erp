@@ -17,10 +17,15 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
     protected $fillable = [
+        'pelanggan_id',
+        'username',
         'name',
         'email',
         'password',
+        'role_id',
+        'status',
     ];
 
     /**
@@ -31,6 +36,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'deleted_at',
     ];
 
     /**
@@ -43,6 +49,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
         ];
     }
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
 }

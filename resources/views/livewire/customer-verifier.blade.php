@@ -1,142 +1,193 @@
-<div class="p-6 rounded-xl">
-    <div class="relative bg-white rounded-xl shadow-sm overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-        
-        <div class="p-6">
-            <!-- Header/Title Section -->
-            <div class="mb-6 flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-1">Verifikasi Pelanggan</h2>
-                    <p class="text-sm text-gray-500">Mengelola dan melihat data pelanggan Anda</p>
-                </div>
+<div class="bg-white rounded-xl shadow-sm mx-6 my-3">
+    <div class="p-6">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">Verifikasi Pelanggan</h2>
+            <div class="flex items-center space-x-2">
+                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                    Stok Meteran: {{ $stokMeteran }}
+                </span>
             </div>
-            
-            <!-- Table Section -->
-            <div class="bg-white rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-6 pt-4 pb-2">
-                    <!-- Search Input -->
-                    <div class="relative flex-1 max-w-md">
-                        <div class="absolute inset-y-0 left-0 pl-4 pe-4 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400/75"></i>
-                        </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="mb-8 bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+            <!-- Filter Section -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                <!-- Search Input - Enhanced -->
+                <div class="md:col-span-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Cari Pelanggan</label>
+                    <div class="relative rounded-lg shadow-sm">
+                        {{-- <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div> --}}
                         <input 
-                            wire:model.debounce.300ms="search" 
-                            type="search" 
-                            class="block w-full px-8 py-3 bg-gray-50 border-0 text-gray-900 text-sm placeholder:text-gray-400/75 rounded-xl focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:bg-white transition-all duration-200"
-                            placeholder="Cari pelanggan..."
+                            type="text" 
+                            wire:model.live.debounce.300ms="search"
+                            placeholder="Nama, nomor pelanggan/meteran..."
+                            class="pl-6 block w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                         >
-                        <div wire:loading wire:target="search" class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <div class="animate-spin rounded-full h-5 w-5 border-[2.5px] border-gray-200 border-t-blue-600"></div>
-                        </div>
                     </div>
-                    
-                    {{-- <button class="text-sm bg-blue-500 text-white hover:bg-blue-700 transition-colors flex items-center px-4 py-2 rounded-lg ml-4">
-                        <i class="fas fa-user-plus mr-1"></i>
-                        Tambah Pelanggan
-                    </button> --}}
                 </div>
-
-                <div class="overflow-x-auto relative">
-                    <!-- Loading Overlay -->
-                    <div wire:loading.delay.longer wire:target="search" class="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
-                        <div class="flex items-center gap-2">
-                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                            <span class="text-sm text-gray-500">Mencari data...</span>
-                        </div>
-                    </div>
-
-                    <table class="w-full whitespace-nowrap">
-                        <thead>
-                            <tr>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 w-16">No</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[150px]">No. Pelanggan</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[200px]">Nama</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[250px]">Alamat</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[150px]">No. Meteran</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[150px]">Kategori</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[150px]">Area</th>
-                                <th class="px-6 py-3 text-xs font-medium text-gray-500 text-left border-b border-gray-100 min-w-[120px]">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse($pelanggan as $index => $customer)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $index + 1 }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nomor_pelanggan'] ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nama'] ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['alamat'] ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $customer['nomor_meteran'] ?? 'N/A' }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full">
-                                        {{ optional($customer['kategori'])['nama_kategori'] ?? 'N/A' }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ optional($customer['area'])['nama'] ?? 'N/A' }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex space-x-3">
-                                        <a href="{{ route('pelanggan.detail', ['id' => $customer['id'] ?? null]) }}" 
-                                            class="p-2.5 bg-blue-500 hover:bg-blue-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md"
-                                            title="Lihat Detail">
-                                            <i class="text-white fas fa-eye"></i>
-                                        </a>
-                                        <a href="#" 
-                                            class="p-2.5 bg-green-500 hover:bg-green-600 rounded-lg transition-all flex items-center justify-center w-10 h-10 shadow-sm hover:shadow-md"
-                                            title="Approve">
-                                            <i class="text-white fas fa-check"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="8" class="px-6 py-4 text-center text-gray-500">
-                                    {{ empty($search) ? 'Tidak ada data pelanggan' : 'Tidak ada hasil pencarian untuk "' . $search . '"' }}
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                @if($total > 0)
-                <div class="px-6 py-4 border-t border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <!-- Pagination Info -->
-                        <div class="text-sm text-gray-500">
-                            Menampilkan {{ ($currentPage - 1) * $perPage + 1 }} sampai {{ min($currentPage * $perPage, $total) }} dari {{ $total }} data
-                        </div>
-                        
-                        <!-- Pagination Controls -->
-                        <div class="flex items-center space-x-2">
-                            <button 
-                                wire:click="previousPage" 
-                                class="px-3 py-2 text-sm font-medium {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-blue-600' }} transition-colors"
-                                {{ $currentPage == 1 ? 'disabled' : '' }}
-                            >
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <!-- Dynamic Page Numbers -->
-                            @foreach(range(1, $lastPage) as $i)
-                                <button 
-                                    wire:click="gotoPage({{ $i }})" 
-                                    class="px-3 py-2 text-sm font-medium {{ $i == $currentPage ? 'bg-blue-50 text-blue-600 rounded-lg' : 'text-gray-500 hover:text-blue-600' }} transition-colors"
-                                >
-                                    {{ $i }}
-                                </button>
+        
+                <!-- Status Filter - Elegant -->
+                <div class="md:col-span-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <div class="relative">
+                        <select 
+                            wire:model.live="filterStatus"
+                            class="appearance-none block w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white"
+                        >
+                            <option value="">Semua Status</option>
+                            @foreach($statusOptions as $status)
+                                <option value="{{ $status }}" class="py-1">{{ ucfirst($status) }}</option>
                             @endforeach
-                            <button 
-                                wire:click="nextPage" 
-                                class="px-3 py-2 text-sm font-medium {{ $currentPage == $lastPage ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-blue-600' }} transition-colors"
-                                {{ $currentPage == $lastPage ? 'disabled' : '' }}
-                            >
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
                         </div>
                     </div>
                 </div>
-                @endif
+        
+                <!-- Reset Button - Modern -->
+                <div class="md:col-span-2">
+                    <button 
+                        wire:click="resetFilters"
+                        class="w-full flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4 a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5 a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                        </svg>
+                        Reset
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- Messages -->
+        @if($successMessage)
+            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                {{ $successMessage }}
+            </div>
+        @endif
+        
+        @if($errorMessage)
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                {{ $errorMessage }}
+            </div>
+        @endif
+
+        <!-- Table Section -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Pelanggan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No Pelanggan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No Meteran</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Alamat</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($pelanggan as $index => $item)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $index + $pelanggan->firstItem() }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ $item->nama_pelanggan }}</div>
+                            <div class="text-xs text-gray-500">{{ $item->nomor_telp }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $item->nomor_pelanggan }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $item->nomor_meteran ?? '-' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">{{ $item->alamat }}</div>
+                            <div class="text-xs text-gray-500">
+                                RT {{ $item->rt }}/RW {{ $item->rw }}, {{ $item->desa->nama ?? '' }}, {{ $item->kecamatan->nama ?? '' }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if($item->status != 'pending' && $item->status != 'rejected')
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Verified
+                                </span>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    {{ $item->verified_at?->format('d/m/Y H:i') }}
+                                </div>
+                            @elseif($item->status === 'rejected')
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Rejected
+                                </span>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    {{ $item->rejected_at?->format('d/m/Y H:i') }}
+                                </div>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Pending
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center space-x-2">
+                                @if($item->status == 'pending')
+                                    <button 
+                                        wire:click="approveCustomer({{ $item->id }})"
+                                        style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; border-radius: 0.375rem; background-color: #10B981; color: white; transition: all 0.2s; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);"
+                                        onmouseover="this.style.backgroundColor='#059669'; this.style.transform='translateY(-1px)';" 
+                                        onmouseout="this.style.backgroundColor='#10B981'; this.style.transform='translateY(0)';"
+                                    >
+                                        <i class="fas fa-check mr-2" style="font-size: 0.75rem;"></i> Approve
+                                    </button>
+                                @endif
+                                
+                                {{-- @if($item->status !== 'rejected')
+                                    <button 
+                                        wire:click="rejectCustomer({{ $item->id }})"
+                                        class="p-2 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
+                                        title="Tolak"
+                                    >
+                                        <i class="fas fa-times-circle text-red-700 text-lg"></i>
+                                        <span class="sr-only">Tolak</span>
+                                    </button>
+                                @endif
+                                
+                                <button 
+                                    wire:click="deleteCustomer({{ $item->id }})"
+                                    class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                    title="Hapus"
+                                    onclick="return confirm('Yakin ingin menghapus pelanggan ini?')"
+                                >
+                                    <i class="fas fa-trash-alt text-gray-700 text-lg"></i>
+                                    <span class="sr-only">Hapus</span>
+                                </button> --}}
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                            Tidak ada data pelanggan
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-4">
+            {{ $pelanggan->links() }}
         </div>
     </div>
 </div>
