@@ -28,6 +28,7 @@ Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/input-master-spks', App\Livewire\Pelanggan\InputMasterSpks::class)->name('pelanggan.input-master-spks');
     Route::get('/tambah-pelanggan', App\Livewire\Pelanggan\TambahPelanggan::class)->name('pelanggan.tambah');
     Route::get('/verif', CustomerVerifier::class)->name('verifikasi.index');
+    Route::get('/aktivasi', App\Livewire\Pelanggan\AktivasiPelanggan::class)->name('pelanggan.aktivasi');
 
     Route::get('/gudang/menu-barang', App\Livewire\Gudang\TambahBarang::class)->name('gudang.tambah-barang');
     Route::get('/gudang/stok-barang', App\Livewire\Gudang\StokBarang::class)->name('gudang.stok-barang');
@@ -37,6 +38,7 @@ Route::middleware(ApiAuth::class)->group(function () {
     Route::get('/tagihan/daftar-tagihan', App\Livewire\Tagihan\DaftarTagihan::class)->name('tagihan.daftar-tagihan');
 
     Route::get('/naskah-dinas/tambah-surat-perintah-kerja', App\Livewire\NaskahDinas\TambahSuratPerintahKerja::class)->name('naskah-dinas.surat-perintah-kerja');
+    Route::get('/naskah-dinas/daftar-spk', App\Livewire\NaskahDinas\DaftarSPK::class)->name('naskah-dinas.daftar-spk');
     
     Route::get('/pengadaan/menu-daftar-vendor', App\Livewire\Pengadaan\MenuDaftarVendor::class)->name('pengadaan.menu-daftar-vendor');
     Route::get('/pengadaan/tambah-vendor', App\Livewire\Pengadaan\TambahVendor::class)->name('pengadaan.tambah-vendor');

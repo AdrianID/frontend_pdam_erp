@@ -10,7 +10,7 @@
                     <h1 class="text-lg font-medium text-gray-800">{{ isset($pelanggan) ? 'Edit Pelanggan' : 'Tambah Pelanggan Baru' }}</h1>
                 </div>
                 
-                <div class="flex items-center space-x-3">
+                {{-- <div class="flex items-center space-x-3">
                     <button type="button" wire:click="cancel" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                         Batal
                     </button>
@@ -19,7 +19,7 @@
                         <span wire:loading.remove>{{ isset($pelanggan) ? 'Simpan Perubahan' : 'Simpan' }}</span>
                         <span wire:loading>Menyimpan...</span>
                     </button>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -278,10 +278,9 @@
                             <label for="kelompok" class="block text-sm font-medium text-gray-700 mb-1">Kelompok</label>
                             <select id="kelompok" wire:model="kelompok" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
                                 <option value="">Pilih Kelompok</option>
-                                <option value="1">Domestik</option>
-                                <option value="2">Niaga</option>
-                                <option value="3">Industri</option>
-                                <option value="4">Instansi</option>
+                                @foreach($kategoriOptions as $option)
+                                    <option value="{{ $option->id }}">{{ $option->nama_kategori }}</option>
+                                @endforeach
                             </select>
                             @error('kelompok') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
@@ -354,15 +353,15 @@
                         </div>
 
                         {{-- ... existing form fields ... --}}
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="nomorPelanggan">Nomor Pelanggan</label>
                             <input type="text" class="form-control" id="nomorPelanggan" wire:model="nomorPelanggan" readonly>
-                        </div>
+                        </div> --}}
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="nomorMeteran">Nomor Meteran</label>
                             <input type="text" class="form-control" id="nomorMeteran" wire:model="nomorMeteran" readonly>
-                        </div>
+                        </div> --}}
                         {{-- ... remaining form fields ... --}}
                     </div>
                 </div>
@@ -427,9 +426,9 @@
                 
                 <div class="p-6">
                     <!-- Map Container -->
-                    <div class="h-[300px] bg-gray-100 rounded-lg mb-6 relative" id="map">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <p class="text-gray-500">Pilih lokasi pada peta</p>
+                    <div class="h-[400px] w-full bg-gray-100 rounded-lg mb-6 relative" id="map">
+                        <div class="absolute inset-0 flex items-center justify-center z-0" id="map-placeholder">
+                            <p class="text-gray-500">Memuat peta...</p>
                         </div>
                     </div>
                     
@@ -438,14 +437,16 @@
                         <!-- Latitude -->
                         <div>
                             <label for="latitude" class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
-                            <input type="number" wire:model="latitude" step="0.00000001" min="-90" max="90" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                            <input type="number" wire:model="latitude" step="0.00000001" min="-90" max="90" 
+                                   class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" readonly />
                             @error('latitude') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
                         
                         <!-- Longitude -->
                         <div>
                             <label for="longitude" class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
-                            <input type="number" wire:model="longitude" step="0.00000001" min="-180" max="180" class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" />
+                            <input type="number" wire:model="longitude" step="0.00000001" min="-180" max="180" 
+                                   class="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600" readonly />
                             @error('longitude') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -481,68 +482,56 @@
 </div>
 
 @push('scripts')
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 document.addEventListener('livewire:init', function() {
-    // Inisialisasi Select2
-    function initSelect2() {
-        $('.select2').select2({
-            placeholder: 'Pilih opsi',
-            allowClear: true,
-            width: '100%'
-        }).on('change', function() {
-            const model = $(this).attr('wire:model');
-            if (model) {
-                @this.set(model, $(this).val());
-            }
-        });
-    }
-
-    // Inisialisasi pertama
-    initSelect2();
-
-    // Re-init setelah Livewire update
-    Livewire.hook('message.processed', () => {
-        initSelect2();
+    // Default coordinates (Jakarta)
+    const defaultLat = {{ $latitude ?? -6.2088 }};
+    const defaultLng = {{ $longitude ?? 106.8456 }};
+    
+    // Inisialisasi peta
+    const map = L.map('map').setView([defaultLat, defaultLng], 15);
+    
+    // Tambahkan tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    // Tambahkan marker
+    const marker = L.marker([defaultLat, defaultLng], {
+        draggable: true
+    }).addTo(map);
+    
+    // Hapus placeholder setelah peta dimuat
+    document.getElementById('map-placeholder').style.display = 'none';
+    
+    // Event ketika marker dipindahkan
+    marker.on('dragend', function(e) {
+        const position = marker.getLatLng();
+        @this.set('latitude', position.lat);
+        @this.set('longitude', position.lng);
     });
-});
+    
+    // Event ketika peta diklik
+    map.on('click', function(e) {
+        marker.setLatLng(e.latlng);
+        @this.set('latitude', e.latlng.lat);
+        @this.set('longitude', e.latlng.lng);
+    });
+    
+    // Livewire hook untuk update marker dari server
+    Livewire.on('updateMarker', (data) => {
+        const newLatLng = L.latLng(data.latitude, data.longitude);
+        marker.setLatLng(newLatLng);
+        map.setView(newLatLng);
+    });
 
-// Google Maps
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('map')) {
-        const initialLat = {{ $latitude ?? -6.2088 }};
-        const initialLng = {{ $longitude ?? 106.8456 }};
-        
-        const map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: initialLat, lng: initialLng },
-            zoom: 15
-        });
-
-        const marker = new google.maps.Marker({
-            position: { lat: initialLat, lng: initialLng },
-            map: map,
-            draggable: true
-        });
-
-        google.maps.event.addListener(marker, 'dragend', function() {
-            const position = marker.getPosition();
-            @this.set('latitude', position.lat());
-            @this.set('longitude', position.lng());
-        });
-
-        google.maps.event.addListener(map, 'click', function(event) {
-            marker.setPosition(event.latLng);
-            @this.set('latitude', event.latLng.lat());
-            @this.set('longitude', event.latLng.lng());
-        });
-
-        // Update marker ketika Livewire update koordinat
-        Livewire.on('updateMarker', (data) => {
-            const newPosition = new google.maps.LatLng(data.latitude, data.longitude);
-            marker.setPosition(newPosition);
-            map.setCenter(newPosition);
-        });
-    }
+    marker.on('dragend', L.Util.throttle(function(e) {
+    const position = marker.getLatLng();
+    @this.call('updateMapPosition', position.lat, position.lng);
+}, 200));
 });
 </script>
 @endpush

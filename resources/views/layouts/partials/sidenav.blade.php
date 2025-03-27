@@ -43,6 +43,12 @@
                         </a>
                     </li>
                     <li class="pl-12 pr-4">
+                        <a href="{{ route('pelanggan.aktivasi') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                            <i class="fas fa-user-cog mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
+                            <span>Aktivasi Pelanggan</span>
+                        </a>
+                    </li>
+                    <li class="pl-12 pr-4">
                         <a href="{{ route('pelanggan.index') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-address-card mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Data Induk Pelanggan</span>
@@ -253,15 +259,15 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
-                        <a href="{{ route('naskah-dinas.surat-perintah-kerja') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('naskah-dinas.daftar-spk') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-tasks mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Surat Perintah Kerja</span>
+                            <span>Daftar Surat Perintah Kerja</span>
                         </a>
                     </li>
                     <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('naskah-dinas.surat-perintah-kerja') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-edit mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
-                            <span>Buat Naskah Baru</span>
+                            <span>Buat Surat Perintah Kerja Baru</span>
                         </a>
                     </li>
                     <li class="pl-12 pr-4">
@@ -284,7 +290,7 @@
                 </a>
                 <ul class="submenu hidden overflow-hidden transition-all duration-300">
                     <li class="pl-12 pr-4">
-                        <a href="#" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
+                        <a href="{{ route('pengadaan.tambah-vendor') }}" class="group flex items-center py-2.5 text-sm text-slate-500 hover:text-blue-500 transition-colors">
                             <i class="fas fa-plus-square mr-2 text-xs group-hover:text-blue-500 transition-colors"></i>
                             <span>Tambah Vendor</span>
                         </a>

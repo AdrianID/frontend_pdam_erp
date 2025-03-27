@@ -42,6 +42,7 @@ class TambahVendor extends Component
         'keterangan' => 'nullable|string',
         'email' => 'nullable|email|max:255',
         'tanggal_bergabung' => 'nullable|date',
+        // 'user_id' => 'nullable|integer|exists:users,id',
     ];
 
     public function mount()
@@ -114,10 +115,12 @@ class TambahVendor extends Component
                 'keterangan' => $this->keterangan,
                 'email' => $this->email,
                 'tanggal_bergabung' => $this->tanggal_bergabung,
+                'user_id' => null,
             ]);
 
             session()->flash('success', 'Vendor berhasil ditambahkan!');
             $this->resetForm();
+            return redirect()->route('pengadaan.menu-daftar-vendor');
 
         } catch (\Exception $e) {
             // Commenting out file deletion on error
